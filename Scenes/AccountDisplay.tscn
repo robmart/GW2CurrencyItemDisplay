@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://reisibjll85m" path="res://Resources/Icons/Cross.svg" id="2_gqdxe"]
 [ext_resource type="Texture2D" uid="uid://cp5po1nyfe5vp" path="res://Resources/Icons/Edit.svg" id="2_ppdv4"]
 
-[node name="AccountDisplay" type="VBoxContainer" node_paths=PackedStringArray("Nickname", "DisplayName", "Enabled")]
+[node name="AccountDisplay" type="VBoxContainer" node_paths=PackedStringArray("Nickname", "DisplayName", "Enabled", "Remove")]
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 34.0
@@ -17,6 +17,7 @@ script = ExtResource("1_djog5")
 Nickname = NodePath("HBoxContainer/NicknameLabel")
 DisplayName = NodePath("HBoxContainer/DisplayNameLabel")
 Enabled = NodePath("HBoxContainer/MarginContainer/EnabledBox")
+Remove = NodePath("HBoxContainer/RemoveButton")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2

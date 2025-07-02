@@ -11,6 +11,9 @@ public partial class CurrencyGrid : Tree {
 
 		Sync.Instance.SyncCurrenciesEvent += SyncCurrencies;
 		Sync.Instance.SyncAllEvent += SyncCurrencies;
+
+		Sync.Instance.SyncCurrenciesAccountEvent += (_) => SyncCurrencies();
+		Sync.Instance.SyncAllAccountEvent += SyncCurrencies;
 	}
 
 	private void SyncCurrencies() {

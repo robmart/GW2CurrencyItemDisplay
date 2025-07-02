@@ -7,6 +7,7 @@ public partial class AccountDisplay : VBoxContainer {
 	[Export] public Label Nickname;
 	[Export] public Label DisplayName;
 	[Export] public CheckBox Enabled;
+	[Export] public TextureButton Remove;
 	
 	public Account Account { get; set; }
 	private bool IsSetup { get; set; } = false;
@@ -16,6 +17,7 @@ public partial class AccountDisplay : VBoxContainer {
 		base._Ready();
 
 		Enabled.Pressed += _EnableToggled;
+		Remove.Pressed += _Remove;
 	}
 
 	public override void _Process(double delta) {
@@ -38,5 +40,12 @@ public partial class AccountDisplay : VBoxContainer {
 		
 		Account.Enabled = Enabled.ButtonPressed;
 		Sync.Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(Sync.Instance.SyncAllEvent));
+	}
+
+	private void _Remove() {
+		Reference.Accounts.Remove(Account);
+		Sync.Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(Sync.Instance.SyncAllEvent));
+		Storage.SaveAll();
+		QueueFree();
 	}
 }

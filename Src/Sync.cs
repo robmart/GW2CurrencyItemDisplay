@@ -13,11 +13,15 @@ public partial class Sync : Control {
 	[Signal]
 	public delegate void SyncAllEventEventHandler();
 	[Signal]
-	public delegate void SyncAnyEventEventHandler();
-	[Signal]
 	public delegate void SyncCurrenciesEventEventHandler();
 	[Signal]
-	public delegate void SyncAccountNameEventEventHandler();
+	public delegate void SyncAllAccountEventEventHandler();
+	[Signal]
+	public delegate void SyncAccountEventEventHandler(string apiKey);
+	[Signal]
+	public delegate void SyncAccountNameEventEventHandler(string apiKey);
+	[Signal]
+	public delegate void SyncCurrenciesAccountEventEventHandler(string apiKey);
 	
 	public static Sync Instance;
 
@@ -66,13 +70,15 @@ public partial class Sync : Control {
 			await SyncAccountData(gw2, account);
 		}
 
-		Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(SyncAllEvent));
+		Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(SyncAllAccountEvent));
 	}
 
 	public static async Task SyncAccountData(Gw2Client gw2, Account account) {
 		await SyncAccountNameData(gw2, account);
 		await SyncAccountCurrencyData(gw2, account);
 		account.Initialized = true;
+
+		Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(SyncAccountEvent), account.ApiKey);
 	}
 
 	public static async Task SyncAccountNameData(Gw2Client gw2, Account account) {
@@ -80,7 +86,7 @@ public partial class Sync : Control {
 
 		account.AccountName = summary.DisplayName;
 		
-		Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(SyncAccountNameEvent));
+		Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(SyncAccountNameEvent), account.ApiKey);
 	}
 
 	private static async Task SyncAccountCurrencyData(Gw2Client gw2, Account account) {
@@ -91,6 +97,6 @@ public partial class Sync : Control {
 			account.Currencies.Add(newCurrency, currency.Amount);
 		}
 
-		Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(SyncCurrenciesEvent));
+		Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(SyncCurrenciesAccountEvent), account.ApiKey);
 	}
 }
