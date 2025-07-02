@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://x37d5aetsd1y"]
+
+[ext_resource type="Script" uid="uid://bn4k0djyxqc0a" path="res://Src/UI/CurrencyGrid.cs" id="1_v8b12"]
+
+[node name="CurrencyGrid" type="Tree"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 0
+theme_override_constants/h_separation = 8
+theme_override_constants/icon_max_width = 32
+hide_folding = true
+enable_recursive_folding = false
+script = ExtResource("1_v8b12")

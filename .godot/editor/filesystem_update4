@@ -1,0 +1,12 @@
+res://Scenes/CurrencyGrid.tscn
+res://Scenes/Interface.tscn
+res://Scenes/ModulatingButton.tscn
+res://Scenes/Settings.tscn
+res://Scenes/AccountDisplay.tscn
+res://Src/Settings.cs
+res://Src/UI/ModulatingButton.cs
+res://Src/UI/AddAccountButton.cs
+res://Src/UI/ApiKeyEdit.cs
+res://Src/Sync.cs
+res://Src/UI/CurrencyGrid.cs
+res://Src/AccountDisplay.cs

@@ -1,0 +1,104 @@
+[gd_scene load_steps=6 format=3 uid="uid://c2i2el7vhma7r"]
+
+[ext_resource type="PackedScene" uid="uid://dl6gix00ms4gd" path="res://Scenes/AccountDisplay.tscn" id="1_4hxq3"]
+[ext_resource type="Script" uid="uid://deysr2ctmepon" path="res://Src/UI/ApiKeyEdit.cs" id="1_mjqtt"]
+[ext_resource type="PackedScene" uid="uid://brrubyej351bh" path="res://Scenes/ModulatingButton.tscn" id="1_yrknh"]
+[ext_resource type="Texture2D" uid="uid://orn7u37gh2js" path="res://Resources/Icons/Plus.svg" id="2_w1nw0"]
+[ext_resource type="Script" uid="uid://d176twog3nr7e" path="res://Src/UI/AddAccountButton.cs" id="4_ppjuv"]
+
+[node name="Settings" type="TabContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+current_tab = 0
+tab_focus_mode = 0
+
+[node name="Accounts" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 10
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Accounts"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="AddAccountContainer" type="HBoxContainer" parent="Accounts/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="NickNameEdit" type="TextEdit" parent="Accounts/VBoxContainer/AddAccountContainer"]
+custom_minimum_size = Vector2(200, 35)
+layout_mode = 2
+focus_mode = 1
+placeholder_text = "Nickname"
+emoji_menu_enabled = false
+
+[node name="APIKeyEdit" type="TextEdit" parent="Accounts/VBoxContainer/AddAccountContainer"]
+custom_minimum_size = Vector2(700, 35)
+layout_mode = 2
+focus_mode = 1
+placeholder_text = "API Key"
+emoji_menu_enabled = false
+script = ExtResource("1_mjqtt")
+
+[node name="AddAccountButton" parent="Accounts/VBoxContainer/AddAccountContainer" node_paths=PackedStringArray("Nickname", "APIKey", "ErrorLabel", "AccountContainer") instance=ExtResource("1_yrknh")]
+modulate = Color(0.330676, 1, 0.282483, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+toggle_mode = false
+texture_normal = ExtResource("2_w1nw0")
+texture_pressed = ExtResource("2_w1nw0")
+texture_hover = ExtResource("2_w1nw0")
+texture_disabled = ExtResource("2_w1nw0")
+texture_focused = ExtResource("2_w1nw0")
+ignore_texture_size = true
+stretch_mode = 4
+script = ExtResource("4_ppjuv")
+Nickname = NodePath("../NickNameEdit")
+APIKey = NodePath("../APIKeyEdit")
+ErrorLabel = NodePath("../../ErrorLabel")
+AccountContainer = NodePath("../../HBoxContainer/MarginContainer/VBoxContainer")
+AccountDisplay = ExtResource("1_4hxq3")
+PressedColor = Color(0.0641727, 0.709207, 1.92523e-07, 1)
+HoverColor = Color(0.0864816, 0.850979, 1.15514e-06, 1)
+HoverPressedColor = Color(0.0408064, 0.567304, 0, 1)
+
+[node name="ErrorLabel" type="Label" parent="Accounts/VBoxContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 1
+
+[node name="Control" type="Control" parent="Accounts/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.05
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Accounts/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Accounts/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Accounts/VBoxContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="Accounts/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="Accounts/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3

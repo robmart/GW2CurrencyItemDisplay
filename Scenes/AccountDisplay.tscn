@@ -1,0 +1,94 @@
+[gd_scene load_steps=7 format=3 uid="uid://dl6gix00ms4gd"]
+
+[ext_resource type="Script" uid="uid://duivc3sllggv" path="res://Src/AccountDisplay.cs" id="1_djog5"]
+[ext_resource type="Texture2D" uid="uid://cdf2dtejh7tle" path="res://Resources/Icons/CheckboxChecked.svg" id="1_g0dhu"]
+[ext_resource type="PackedScene" uid="uid://brrubyej351bh" path="res://Scenes/ModulatingButton.tscn" id="1_vlym5"]
+[ext_resource type="Texture2D" uid="uid://c6o10nfw2bhqd" path="res://Resources/Icons/Checkbox.svg" id="1_xup26"]
+[ext_resource type="Texture2D" uid="uid://reisibjll85m" path="res://Resources/Icons/Cross.svg" id="2_gqdxe"]
+[ext_resource type="Texture2D" uid="uid://cp5po1nyfe5vp" path="res://Resources/Icons/Edit.svg" id="2_ppdv4"]
+
+[node name="AccountDisplay" type="VBoxContainer" node_paths=PackedStringArray("Nickname", "DisplayName", "Enabled")]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 34.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+script = ExtResource("1_djog5")
+Nickname = NodePath("HBoxContainer/NicknameLabel")
+DisplayName = NodePath("HBoxContainer/DisplayNameLabel")
+Enabled = NodePath("HBoxContainer/MarginContainer/EnabledBox")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="NicknameLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="DisplayNameLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_left = -6
+theme_override_constants/margin_top = -3
+theme_override_constants/margin_right = -6
+theme_override_constants/margin_bottom = -3
+
+[node name="EnabledBox" type="CheckBox" parent="HBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+focus_mode = 0
+theme_override_constants/h_separation = 0
+theme_override_constants/icon_max_width = 32
+theme_override_constants/check_v_offset = 0
+theme_override_icons/checked = ExtResource("1_g0dhu")
+theme_override_icons/unchecked = ExtResource("1_xup26")
+theme_override_icons/radio_checked = ExtResource("1_xup26")
+theme_override_icons/radio_unchecked = ExtResource("1_xup26")
+theme_override_icons/checked_disabled = ExtResource("1_xup26")
+theme_override_icons/unchecked_disabled = ExtResource("1_xup26")
+theme_override_icons/radio_checked_disabled = ExtResource("1_xup26")
+theme_override_icons/radio_unchecked_disabled = ExtResource("1_xup26")
+flat = true
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="EditButton" parent="HBoxContainer" instance=ExtResource("1_vlym5")]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+toggle_mode = false
+texture_normal = ExtResource("2_ppdv4")
+texture_pressed = ExtResource("2_ppdv4")
+texture_hover = ExtResource("2_ppdv4")
+texture_disabled = ExtResource("2_ppdv4")
+texture_focused = ExtResource("2_ppdv4")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="RemoveButton" parent="HBoxContainer" instance=ExtResource("1_vlym5")]
+modulate = Color(0.969779, 0, 0.200845, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+toggle_mode = false
+texture_normal = ExtResource("2_gqdxe")
+texture_pressed = ExtResource("2_gqdxe")
+texture_hover = ExtResource("2_gqdxe")
+texture_disabled = ExtResource("2_gqdxe")
+texture_focused = ExtResource("2_gqdxe")
+ignore_texture_size = true
+stretch_mode = 4
+PressedColor = Color(0.542947, 0, 0.0937665, 1)
+HoverColor = Color(0.701576, 0, 0.133425, 1)
+HoverPressedColor = Color(0.541176, 0, 0.0941176, 1)
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2

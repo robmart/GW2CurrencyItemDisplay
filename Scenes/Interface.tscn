@@ -1,0 +1,101 @@
+[gd_scene load_steps=8 format=3 uid="uid://dg8beyp5lyvb2"]
+
+[ext_resource type="PackedScene" uid="uid://brrubyej351bh" path="res://Scenes/ModulatingButton.tscn" id="1_6lbs1"]
+[ext_resource type="Texture2D" uid="uid://cq6uwyyvtjiwv" path="res://Resources/Icons/Currency.svg" id="1_o0cgi"]
+[ext_resource type="PackedScene" uid="uid://x37d5aetsd1y" path="res://Scenes/CurrencyGrid.tscn" id="2_ga4cb"]
+[ext_resource type="Texture2D" uid="uid://cxtestefd17t4" path="res://Resources/Icons/Settings.svg" id="3_wi8ec"]
+[ext_resource type="PackedScene" uid="uid://c2i2el7vhma7r" path="res://Scenes/Settings.tscn" id="5_odcd3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ga4cb"]
+bg_color = Color(0.12549, 0.12549, 0.12549, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6lbs1"]
+bg_color = Color(0.180392, 0.180392, 0.180392, 1)
+
+[node name="Interface" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ga4cb")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6lbs1")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="CurrencyButton" parent="HBoxContainer/PanelContainer/MarginContainer/HBoxContainer" node_paths=PackedStringArray("Tab", "Tabs") instance=ExtResource("1_6lbs1")]
+modulate = Color(0.815686, 0.635294, 0.223529, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture_normal = ExtResource("1_o0cgi")
+texture_pressed = ExtResource("1_o0cgi")
+texture_hover = ExtResource("1_o0cgi")
+texture_disabled = ExtResource("1_o0cgi")
+texture_focused = ExtResource("1_o0cgi")
+ignore_texture_size = true
+stretch_mode = 4
+HoverColor = Color(0.577834, 0.444025, 0.133572, 1)
+HoverPressedColor = Color(0.720467, 0.720468, 0.720467, 1)
+Tab = NodePath("../../../../Tabs/CurrencyGrid")
+Tabs = NodePath("../../../../Tabs")
+
+[node name="Spacer" type="Control" parent="HBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SettingsButton" parent="HBoxContainer/PanelContainer/MarginContainer/HBoxContainer" node_paths=PackedStringArray("Tab", "Tabs") instance=ExtResource("1_6lbs1")]
+modulate = Color(0.588235, 0.784314, 0.784314, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture_normal = ExtResource("3_wi8ec")
+texture_pressed = ExtResource("3_wi8ec")
+texture_hover = ExtResource("3_wi8ec")
+texture_disabled = ExtResource("3_wi8ec")
+texture_focused = ExtResource("3_wi8ec")
+ignore_texture_size = true
+stretch_mode = 4
+HoverColor = Color(0.347181, 0.537596, 0.538355, 1)
+HoverPressedColor = Color(0.721569, 0.721569, 0.721569, 1)
+Tab = NodePath("../../../../Tabs/Settings")
+Tabs = NodePath("../../../../Tabs")
+
+[node name="Tabs" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CurrencyGrid" parent="HBoxContainer/Tabs" instance=ExtResource("2_ga4cb")]
+layout_mode = 1
+
+[node name="Settings" parent="HBoxContainer/Tabs" instance=ExtResource("5_odcd3")]
+visible = false
+layout_mode = 1
