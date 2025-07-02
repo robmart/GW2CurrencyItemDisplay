@@ -11,6 +11,14 @@ public partial class CurrencyContainer : VBoxContainer {
 	}
 
 	private void SyncCurrencies() {
-		
+		foreach (var child in GetChildren()) {
+			child.QueueFree();
+		}
+
+		foreach (var currency in Reference.Currencies) {
+			var currencyScene = CurrencyScene.Instantiate<CurrencyDisplay>();
+			currencyScene.Currency = currency;
+			AddChild(currencyScene);
+		}
 	}
 }

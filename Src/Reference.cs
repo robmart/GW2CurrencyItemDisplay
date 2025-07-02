@@ -14,4 +14,5 @@ public static class Reference {
 	// Data
 	public static List<Account> Accounts = new List<Account>();
 	public static List<Currency> Currencies = new List<Currency>();
+	public static List<Setting> Settings = new List<Setting>();
 }

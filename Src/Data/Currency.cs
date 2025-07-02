@@ -35,7 +35,7 @@ public class Currency {
 	public static Dictionary<Currency, int> TotalCurrencies() {
 		var dict = new Dictionary<Currency, int>();
 
-		foreach (var currency in Reference.Currencies) {
+		foreach (var currency in Reference.Currencies.Where(x => x.Enabled)) {
 			var amount = Reference.Accounts.Where(x => x.Enabled && x.Currencies.ContainsKey(currency)).Sum(account => account.Currencies[currency]);
 			dict.Add(currency, amount);
 		}

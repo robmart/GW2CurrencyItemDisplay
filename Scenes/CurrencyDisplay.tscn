@@ -1,0 +1,62 @@
+[gd_scene load_steps=4 format=3 uid="uid://bk8b7ygqdml0d"]
+
+[ext_resource type="Script" uid="uid://bdymdw5h0qq3l" path="res://Src/UI/CurrencyDisplay.cs" id="1_ot6bi"]
+[ext_resource type="Texture2D" uid="uid://cdf2dtejh7tle" path="res://Resources/Icons/CheckboxChecked.svg" id="2_8086k"]
+[ext_resource type="Texture2D" uid="uid://c6o10nfw2bhqd" path="res://Resources/Icons/Checkbox.svg" id="3_uhhf4"]
+
+[node name="CurrencyDisplay" type="VBoxContainer" node_paths=PackedStringArray("Name", "Enabled")]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 34.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+script = ExtResource("1_ot6bi")
+Name = NodePath("HBoxContainer/NameLabel")
+Enabled = NodePath("HBoxContainer/MarginContainer/EnabledBox")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="NameLabel" type="RichTextLabel" parent="HBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+text_direction = 1
+
+[node name="Control" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_left = -6
+theme_override_constants/margin_top = -3
+theme_override_constants/margin_right = -6
+theme_override_constants/margin_bottom = -3
+
+[node name="EnabledBox" type="CheckBox" parent="HBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+focus_mode = 0
+theme_override_constants/h_separation = 0
+theme_override_constants/icon_max_width = 32
+theme_override_constants/check_v_offset = 0
+theme_override_icons/checked = ExtResource("2_8086k")
+theme_override_icons/unchecked = ExtResource("3_uhhf4")
+theme_override_icons/radio_checked = ExtResource("3_uhhf4")
+theme_override_icons/radio_unchecked = ExtResource("3_uhhf4")
+theme_override_icons/checked_disabled = ExtResource("3_uhhf4")
+theme_override_icons/unchecked_disabled = ExtResource("3_uhhf4")
+theme_override_icons/radio_checked_disabled = ExtResource("3_uhhf4")
+theme_override_icons/radio_unchecked_disabled = ExtResource("3_uhhf4")
+flat = true
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2

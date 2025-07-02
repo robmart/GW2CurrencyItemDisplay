@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c2i2el7vhma7r"]
+[gd_scene load_steps=9 format=3 uid="uid://c2i2el7vhma7r"]
 
 [ext_resource type="PackedScene" uid="uid://dl6gix00ms4gd" path="res://Scenes/AccountDisplay.tscn" id="1_4hxq3"]
 [ext_resource type="Script" uid="uid://deysr2ctmepon" path="res://Src/UI/ApiKeyEdit.cs" id="1_mjqtt"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://d176twog3nr7e" path="res://Src/UI/AddAccountButton.cs" id="4_ppjuv"]
 [ext_resource type="Script" uid="uid://clt0oixybvjxb" path="res://Src/UI/AccountContainer.cs" id="6_ppjuv"]
 [ext_resource type="Script" uid="uid://dl8tnnioa2t21" path="res://Src/UI/CurrencyContainer.cs" id="7_ipgag"]
+[ext_resource type="PackedScene" uid="uid://bk8b7ygqdml0d" path="res://Scenes/CurrencyDisplay.tscn" id="8_646k0"]
 
 [node name="Settings" type="TabContainer"]
 anchors_preset = 15
@@ -16,10 +17,11 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 1
 tab_focus_mode = 0
 
 [node name="Accounts" type="MarginContainer" parent="."]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 10
@@ -107,7 +109,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Currencies" type="MarginContainer" parent="."]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 10
@@ -119,17 +120,28 @@ metadata/_tab_index = 1
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Currencies/HBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Currencies/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Currencies/HBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 0
 
-[node name="CurrencyContainer" type="VBoxContainer" parent="Currencies/HBoxContainer/MarginContainer"]
+[node name="CurrencyContainer" type="VBoxContainer" parent="Currencies/HBoxContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("7_ipgag")
+CurrencyScene = ExtResource("8_646k0")
+
+[node name="CurrencyDisplay" parent="Currencies/HBoxContainer/ScrollContainer/MarginContainer/CurrencyContainer" instance=ExtResource("8_646k0")]
+layout_mode = 2
 
 [node name="VSeparator" type="VSeparator" parent="Currencies/HBoxContainer"]
 layout_mode = 2
