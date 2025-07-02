@@ -10,6 +10,8 @@ public partial class CurrencyContainer : VBoxContainer {
 		Sync.Instance.SyncCurrenciesEvent += SyncCurrencies;
 	}
 
+	// Creates UI elements in the settings menu for each currency
+	//Runs every time the currencies are changed
 	private void SyncCurrencies() {
 		foreach (var child in GetChildren()) {
 			child.QueueFree();

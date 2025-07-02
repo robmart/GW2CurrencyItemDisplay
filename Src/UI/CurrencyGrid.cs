@@ -16,11 +16,15 @@ public partial class CurrencyGrid : Tree {
 		Sync.Instance.SyncAllAccountEvent += SyncCurrencies;
 	}
 
+	// Runs every time the currency data changes or a character's currencies are loaded
 	private void SyncCurrencies() {
 		Clear();
+		//Gets the total amount of currencies, ignoring the ones with a value of 0 if Settings.HideEmptyCurrencies is true
 		var totalCurrency = Settings.HideEmptyCurrencies ? Currency.TotalCurrencies().Where(x => x.Value > 0).ToDictionary() : Currency.TotalCurrencies();
+		//Gets the currencies without their amounts from the above results
 		var currencies = Reference.Currencies.Where(totalCurrency.ContainsKey).ToList();
 		
+		// The total columns is one more than there are currencies to account for the account column
 		Columns = 1 + totalCurrency.Count();
 
 		//Not sure why this is needed...
@@ -29,6 +33,7 @@ public partial class CurrencyGrid : Tree {
 
 		#region First Row
 		
+		//Create the first row/item
 		var item = CreateItem();
 		
 		//Account Column
@@ -37,6 +42,8 @@ public partial class CurrencyGrid : Tree {
 		item.SetTextAlignment(0, HorizontalAlignment.Center);
 		var accountWidth = columnSizeOffset + GetStringSize(accountString);
 		SetColumnCustomMinimumWidth(0, accountWidth);
+		
+		//TODO: Need to add some more comments for Kakirtog
 		
 		//
 		for (var i = 1; i < currencies.Count + 1; i++) {
@@ -57,21 +64,35 @@ public partial class CurrencyGrid : Tree {
 
 		#endregion
 
-		#region Total pt1
+		#region Total
 		
+		//Create the row for the totals
 		var totalItem = CreateItem();
 		
 		//Account Column
 		const string totalString = "Total";
 		totalItem.SetText(0, totalString);
 		totalItem.SetTextAlignment(0, HorizontalAlignment.Left);
+		
+		for (var i = 1; i < currencies.Count + 1; i++) {
+			var currency = currencies[i-1];
+			
+			var columnWidth = columnSizeOffset  + GetStringSize(totalCurrency[currency].ToString());
+			if (columnWidth > GetColumnWidth(i))
+				SetColumnCustomMinimumWidth(i, columnWidth);
+			totalItem.SetText(i, totalCurrency[currency].ToString());
+		}
 
 		#endregion
+
+		#region Accounts
 		
 		foreach (var account in Reference.Accounts.Where(x => x.Enabled && x.Initialized)) {
+			//Create the row for the account
 			var item1 = CreateItem();
 		
 			//Account Column
+			//Get nickname if one is set, otherwise use account name
 			var accountName = account.Nickname.Equals("") ? account.AccountName : account.Nickname;
 			item1.SetText(0, accountName);
 			item1.SetTextAlignment(0, HorizontalAlignment.Left);
@@ -89,17 +110,6 @@ public partial class CurrencyGrid : Tree {
 					SetColumnCustomMinimumWidth(i, columnWidth);
 				item1.SetText(i, hasCurrency ? account.Currencies[currency].ToString() : 0.ToString());
 			}
-		}
-
-		#region Total pt2
-		
-		for (var i = 1; i < currencies.Count + 1; i++) {
-			var currency = currencies[i-1];
-			
-			var columnWidth = columnSizeOffset  + GetStringSize(totalCurrency[currency].ToString());
-			if (columnWidth > GetColumnWidth(i))
-				SetColumnCustomMinimumWidth(i, columnWidth);
-			totalItem.SetText(i, totalCurrency[currency].ToString());
 		}
 
 		#endregion

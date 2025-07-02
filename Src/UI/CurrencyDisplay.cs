@@ -19,8 +19,10 @@ public partial class CurrencyDisplay : VBoxContainer {
 	public override void _Process(double delta) {
 		base._Process(delta);
 		
+		// Only runs once when the currency is set
 		if (IsSetup || Currency == null) return;
 		
+		// Sets all the currency data in the UI
 		Enabled.ButtonPressed = Currency.Enabled;
 		IsSetup = true;
 		var image = new ImageTexture();

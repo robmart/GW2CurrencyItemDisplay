@@ -33,6 +33,7 @@ public partial class AddAccountButton : ModulatingButton {
 	}
 
 	private async Task AddNewAPIKey(string key) {
+		//Make UI elements unavailable while adding the key
 		CallDeferred(BaseButton.MethodName.SetDisabled, true);
 		Nickname.CallDeferred(TextEdit.MethodName.SetEditable, false);
 		APIKey.CallDeferred(TextEdit.MethodName.SetEditable, false);
@@ -48,15 +49,20 @@ public partial class AddAccountButton : ModulatingButton {
 				newAccount.Nickname = Nickname.Text;
 			Reference.Accounts.Add(newAccount);
 			await Sync.SyncAccountData(gw2, newAccount);
+			//Add a new UI element for the account
 			var accountDisplay = AccountDisplay.Instantiate<AccountDisplay>();
 			accountDisplay.Account = newAccount;
 			AccountContainer.CallDeferred(Node.MethodName.AddChild, accountDisplay);
+			
 			Storage.SaveAll();
+			
+			//Clear text boxes
 			Nickname.CallDeferred(TextEdit.MethodName.Clear);
 			APIKey.CallDeferred(TextEdit.MethodName.Clear);
 			Success("Success: New account successfully added");
 		}
 		
+		//Make UI elements available again
 		CallDeferred(BaseButton.MethodName.SetDisabled, false);
 		Nickname.CallDeferred(TextEdit.MethodName.SetEditable, true);
 		APIKey.CallDeferred(TextEdit.MethodName.SetEditable, true);
@@ -69,6 +75,7 @@ public partial class AddAccountButton : ModulatingButton {
 			Info("Info: API key valid, adding");
 			return true;
 		}
+		//Should only happen when there's a bad key
 		catch (BadResponseException e) {
 			Error("Error: API key invalid, aborting");
 			return false;

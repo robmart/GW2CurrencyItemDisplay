@@ -8,6 +8,7 @@ public partial class AccountContainer : VBoxContainer {
 	public override void _Ready() {
 		base._Ready();
 
+		// Create UI elements for all already loaded accounts
 		foreach (var account in Reference.Accounts) {
 			var accountDisplay = AccountDisplay.Instantiate<AccountDisplay>();
 			accountDisplay.Account = account;
