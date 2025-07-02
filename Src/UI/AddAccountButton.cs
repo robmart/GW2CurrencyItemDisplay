@@ -51,6 +51,7 @@ public partial class AddAccountButton : ModulatingButton {
 			var accountDisplay = AccountDisplay.Instantiate<AccountDisplay>();
 			accountDisplay.Account = newAccount;
 			AccountContainer.CallDeferred(Node.MethodName.AddChild, accountDisplay);
+			Storage.SaveAll();
 			Nickname.CallDeferred(TextEdit.MethodName.Clear);
 			APIKey.CallDeferred(TextEdit.MethodName.Clear);
 			Success("Success: New account successfully added");

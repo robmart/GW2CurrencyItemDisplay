@@ -19,6 +19,8 @@ config/icon="res://icon.svg"
 
 Sync="*res://Src/Sync.cs"
 Settings="*res://Src/Settings.cs"
+Storage="*res://Src/Storage.cs"
+Startup="*res://Src/Startup.cs"
 
 [display]
 

@@ -25,8 +25,6 @@ public partial class Sync : Control {
 		Instance = this;
 		
 		base._Ready();
-		
-		SyncAll();
 	}
 
 	public static void SyncAll() {
