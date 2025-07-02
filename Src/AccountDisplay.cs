@@ -10,6 +10,7 @@ public partial class AccountDisplay : VBoxContainer {
 	
 	public Account Account { get; set; }
 	private bool IsSetup { get; set; } = false;
+	private bool IsPreSetup { get; set; } = false;
 
 	public override void _Ready() {
 		base._Ready();
@@ -20,12 +21,16 @@ public partial class AccountDisplay : VBoxContainer {
 	public override void _Process(double delta) {
 		base._Process(delta);
 
-		if (IsSetup || Account == null) return;
+		if (!IsPreSetup) {
+			IsPreSetup = true;
+			Nickname.Text = Account.Nickname.Equals(string.Empty) ? "<None>" : Account.Nickname;
+			Enabled.ButtonPressed = Account.Enabled;
+		}
+
+		if (IsSetup || Account == null || Account.AccountName.Equals(string.Empty)) return;
 		
 		IsSetup = true;
-		Nickname.Text = Account.Nickname.Equals("") ? "<None>" : Account.Nickname;
 		DisplayName.Text = Account.AccountName;
-		Enabled.ButtonPressed = Account.Enabled;
 	}
 
 	private void _EnableToggled() {

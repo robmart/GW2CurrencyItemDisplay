@@ -6,12 +6,12 @@ namespace GW2NotionSync.Data;
 
 public class Account {
 	public bool Enabled { get; set; } = true;
-	public string Nickname { get; set; } = "";
+	public string Nickname { get; set; } = string.Empty;
 	public required string ApiKey { get; init; }
 	
 	//Data
 	public bool Initialized { get; internal set; }
-	public string AccountName { get; internal set; }
+	public string AccountName { get; internal set; } = string.Empty;
 	public Dictionary<Currency, int> Currencies { get; } = new();
 	
 	public Godot.Collections.Dictionary<string, Variant> Save() {

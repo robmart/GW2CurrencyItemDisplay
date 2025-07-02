@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://c2i2el7vhma7r"]
+[gd_scene load_steps=7 format=3 uid="uid://c2i2el7vhma7r"]
 
 [ext_resource type="PackedScene" uid="uid://dl6gix00ms4gd" path="res://Scenes/AccountDisplay.tscn" id="1_4hxq3"]
 [ext_resource type="Script" uid="uid://deysr2ctmepon" path="res://Src/UI/ApiKeyEdit.cs" id="1_mjqtt"]
 [ext_resource type="PackedScene" uid="uid://brrubyej351bh" path="res://Scenes/ModulatingButton.tscn" id="1_yrknh"]
 [ext_resource type="Texture2D" uid="uid://orn7u37gh2js" path="res://Resources/Icons/Plus.svg" id="2_w1nw0"]
 [ext_resource type="Script" uid="uid://d176twog3nr7e" path="res://Src/UI/AddAccountButton.cs" id="4_ppjuv"]
+[ext_resource type="Script" uid="uid://clt0oixybvjxb" path="res://Src/UI/AccountContainer.cs" id="6_ppjuv"]
 
 [node name="Settings" type="TabContainer"]
 anchors_preset = 15
@@ -64,7 +65,7 @@ script = ExtResource("4_ppjuv")
 Nickname = NodePath("../NickNameEdit")
 APIKey = NodePath("../APIKeyEdit")
 ErrorLabel = NodePath("../../ErrorLabel")
-AccountContainer = NodePath("../../HBoxContainer/MarginContainer/VBoxContainer")
+AccountContainer = NodePath("../../HBoxContainer/MarginContainer/AccountContainer")
 AccountDisplay = ExtResource("1_4hxq3")
 PressedColor = Color(0.0641727, 0.709207, 1.92523e-07, 1)
 HoverColor = Color(0.0864816, 0.850979, 1.15514e-06, 1)
@@ -93,8 +94,9 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Accounts/VBoxContainer/HBoxContainer/MarginContainer"]
+[node name="AccountContainer" type="VBoxContainer" parent="Accounts/VBoxContainer/HBoxContainer/MarginContainer"]
 layout_mode = 2
+script = ExtResource("6_ppjuv")
 
 [node name="VSeparator" type="VSeparator" parent="Accounts/VBoxContainer/HBoxContainer"]
 layout_mode = 2
