@@ -36,5 +36,6 @@ public partial class CurrencyDisplay : VBoxContainer {
 		
 		Currency.Enabled = Enabled.ButtonPressed;
 		Sync.Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(Sync.Instance.SyncCurrenciesEvent));
+		Storage.SaveCurrencies();
 	}
 }

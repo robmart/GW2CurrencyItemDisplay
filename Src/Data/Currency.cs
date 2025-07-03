@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
+using Godot;
 
 namespace GW2NotionSync.Data;
 
@@ -39,6 +40,23 @@ public class Currency {
 	public static Currency FromAPI(GuildWars2.Hero.Wallet.Currency currency) {
 		return new Currency { Id = currency.Id, Name = currency.Name, Description = currency.Description, 
 			Order = currency.Order, IconUrl = currency.IconUrl};
+	}
+
+	public Godot.Collections.Dictionary<string, Variant> Save() {
+		return new Godot.Collections.Dictionary<string, Variant>() {
+			{ "Id", Id },
+			{ "Name", Name },
+			{ "Description", Description },
+			{ "Order", Order },
+			{ "IconUrl", IconUrl.ToString() },
+			{ "Enabled", Enabled },
+		};
+	}
+	
+	public static void Load(Godot.Collections.Dictionary<string, Variant> save) {
+		Reference.Currencies.Add(new Currency { Id = save["Id"].AsInt32(), Name = save["Name"].AsString(), 
+			Order = save["Order"].AsInt32(),  Description = save["Description"].AsString(), 
+			IconUrl = new Uri(save["IconUrl"].AsString()), Enabled = save["Enabled"].AsBool()});
 	}
 
 	/// <summary>Gets a dictionary with all currencies and their total amounts.</summary>

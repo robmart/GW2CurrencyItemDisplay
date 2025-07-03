@@ -49,6 +49,7 @@ public partial class Sync : Control {
 	//Syncs the definitions for the currencies
 	private static async Task SyncCurrencyData(Gw2Client gw2, bool forceDownload = false) {
 		var (currencies, _) = await gw2.Hero.Wallet.GetCurrencies();
+		var currencyAdded = false;
 
 		Directory.CreateDirectory(Reference.CurrencyIconPath);
 
@@ -60,6 +61,7 @@ public partial class Sync : Control {
 		//Add currencies not already in the list
 		foreach (var newCurrency in from currency in currencies where !currency.Name.Equals(string.Empty) && Reference.Currencies.All(x => x.Id != currency.Id) select Currency.FromAPI(currency)) {
 			Reference.Currencies.Add(newCurrency);
+			currencyAdded = true;
 		}
 
 		//Download the image of the currencies
@@ -69,15 +71,17 @@ public partial class Sync : Control {
 			client.DownloadFileAsync(currency.IconUrl, currency.IconPath);
 		}
 
+		if (currencyAdded) Storage.SaveCurrencies();
+
 		Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(SyncCurrenciesEvent));
 	}
 
-	//Sync all account related data, this needs API key
+	//Sync all account related data, this needs API key(s)
 	public static async Task SyncAllAccountData() {
 		using var httpClient = new HttpClient();
 		var gw2 = new Gw2Client(httpClient);
 
-		foreach (var account in Reference.Accounts.Where(x => x.Enabled)) {
+		foreach (var account in Reference.Accounts) {
 			await SyncAccountData(gw2, account);
 		}
 

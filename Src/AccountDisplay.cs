@@ -40,12 +40,13 @@ public partial class AccountDisplay : VBoxContainer {
 		
 		Account.Enabled = Enabled.ButtonPressed;
 		Sync.Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(Sync.Instance.SyncAllEvent));
+		Storage.SaveAccounts();
 	}
 
 	private void _Remove() {
 		Reference.Accounts.Remove(Account);
 		Sync.Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(Sync.Instance.SyncAllEvent));
-		Storage.SaveAll();
+		Storage.SaveAccounts();
 		QueueFree();
 	}
 }

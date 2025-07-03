@@ -54,7 +54,7 @@ public partial class AddAccountButton : ModulatingButton {
 			accountDisplay.Account = newAccount;
 			AccountContainer.CallDeferred(Node.MethodName.AddChild, accountDisplay);
 			
-			Storage.SaveAll();
+			Storage.SaveAccounts();
 			
 			//Clear text boxes
 			Nickname.CallDeferred(TextEdit.MethodName.Clear);
