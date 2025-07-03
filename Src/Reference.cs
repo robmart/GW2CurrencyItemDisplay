@@ -10,6 +10,9 @@ public static class Reference {
 	public static string DataPath = $"{UserPath}/Data/";
 	public static string IconPath = $"{DataPath}/Icons/";
 	public static string CurrencyIconPath = $"{IconPath}/Currencies/";
+	// --Save Paths
+	public static string CurrencySavePath = "user://Currencies.save";
+	public static string AccountSavePath = "user://Accounts.save";
 	
 	// Data
 	public static List<Account> Accounts = new List<Account>();

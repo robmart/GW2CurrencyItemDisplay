@@ -4,21 +4,21 @@ using GW2NotionSync.Data;
 
 namespace GW2NotionSync;
 
-public partial class Storage : Control { //TODO: Don't hardcode the paths
+public partial class Storage : Control {
 	public static void SaveAll() {
 		SaveCurrencies();
 		SaveAccounts();
 	}
 
 	public static void SaveCurrencies() {
-		using var saveFile = FileAccess.Open("user://Currencies.save", FileAccess.ModeFlags.Write);
+		using var saveFile = FileAccess.Open(Reference.CurrencySavePath, FileAccess.ModeFlags.Write);
 		foreach (var currencyData in Reference.Currencies.Select(currency => currency.Save())) {
 			saveFile.StoreLine(Json.Stringify(currencyData));
 		}
 	}
 
 	public static void SaveAccounts() {
-		using var saveFile = FileAccess.Open("user://Accounts.save", FileAccess.ModeFlags.Write);
+		using var saveFile = FileAccess.Open(Reference.AccountSavePath, FileAccess.ModeFlags.Write);
 		foreach (var accountData in Reference.Accounts.Select(account => account.Save())) {
 			saveFile.StoreLine(Json.Stringify(accountData));
 		}
@@ -31,9 +31,9 @@ public partial class Storage : Control { //TODO: Don't hardcode the paths
 	}
 
 	public static void LoadCurrencies() {
-		if (!FileAccess.FileExists("user://Currencies.save")) return;
+		if (!FileAccess.FileExists(Reference.CurrencySavePath)) return;
 		
-		using var saveFile = FileAccess.Open("user://Currencies.save", FileAccess.ModeFlags.Read);
+		using var saveFile = FileAccess.Open(Reference.CurrencySavePath, FileAccess.ModeFlags.Read);
 		while (saveFile.GetPosition() < saveFile.GetLength()) {
 			var jsonString = saveFile.GetLine();
 			var json = new Json();
@@ -53,9 +53,9 @@ public partial class Storage : Control { //TODO: Don't hardcode the paths
 	}
 
 	public static void LoadAccounts() {
-		if (!FileAccess.FileExists("user://Accounts.save")) return;
+		if (!FileAccess.FileExists(Reference.AccountSavePath)) return;
 		
-		using var saveFile = FileAccess.Open("user://Accounts.save", FileAccess.ModeFlags.Read);
+		using var saveFile = FileAccess.Open(Reference.AccountSavePath, FileAccess.ModeFlags.Read);
 		while (saveFile.GetPosition() < saveFile.GetLength()) {
 			var jsonString = saveFile.GetLine();
 			var json = new Json();
