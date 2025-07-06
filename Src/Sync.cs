@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Godot;
 using GuildWars2;
@@ -11,9 +13,17 @@ namespace GW2NotionSync;
 
 public partial class Sync : Control {
 	[Signal]
+	public delegate void StartSyncEventEventHandler();
+	[Signal]
+	public delegate void FinishSyncEventEventHandler();
+	
+	//Sync data events
+	[Signal]
 	public delegate void SyncAllEventEventHandler();
 	[Signal]
 	public delegate void SyncCurrenciesEventEventHandler();
+	
+	//Sync account data events
 	[Signal]
 	public delegate void SyncAllAccountEventEventHandler();
 	[Signal]
@@ -25,6 +35,16 @@ public partial class Sync : Control {
 	
 	public static Sync Instance;
 
+	public static void AddSyncControl([CallerMemberName] string callerName = "") {
+		if (!SyncControl.IsSyncing) Instance.CallDeferred(MethodName.EmitSignal, SignalName.StartSyncEvent);
+		SyncControl.SyncElements.Add(callerName);
+	}
+
+	public static void RemoveSyncControl([CallerMemberName] string callerName = "") {
+		SyncControl.SyncElements.Remove(callerName);
+		if (!SyncControl.IsSyncing) Instance.CallDeferred(MethodName.EmitSignal, SignalName.FinishSyncEvent);
+	}
+
 	public override void _Ready() {
 		Instance = this;
 		
@@ -32,22 +52,27 @@ public partial class Sync : Control {
 	}
 	
 	public static void SyncAll() {
+		AddSyncControl();
 		Task.Run(() => SyncAllData());
 		Task.Run(SyncAllAccountData);
+		RemoveSyncControl();
 	}
 
 	//Sync all non-account data, the stuff that doesn't need an API key
 	private static async Task SyncAllData(bool forceDownload = false) {
+		AddSyncControl();
 		using var httpClient = new HttpClient();
 		var gw2 = new Gw2Client(httpClient);
 
 		await SyncCurrencyData(gw2, forceDownload);
 
 		Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(SyncAllEvent));
+		RemoveSyncControl();
 	}
 
 	//Syncs the definitions for the currencies
 	private static async Task SyncCurrencyData(Gw2Client gw2, bool forceDownload = false) {
+		AddSyncControl();
 		var (currencies, _) = await gw2.Hero.Wallet.GetCurrencies();
 		var currencyAdded = false;
 
@@ -74,40 +99,50 @@ public partial class Sync : Control {
 		if (currencyAdded) Storage.SaveCurrencies();
 
 		Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(SyncCurrenciesEvent));
+		RemoveSyncControl();
 	}
 
 	//Sync all account related data, this needs API key(s)
 	public static async Task SyncAllAccountData() {
+		AddSyncControl();
 		using var httpClient = new HttpClient();
 		var gw2 = new Gw2Client(httpClient);
 
 		foreach (var account in Reference.Accounts) {
 			await SyncAccountData(gw2, account);
 		}
+		
+		Storage.SaveAccounts();
 
 		Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(SyncAllAccountEvent));
+		RemoveSyncControl();
 	}
 
 	//Syncs account data for a specific account
 	public static async Task SyncAccountData(Gw2Client gw2, Account account) {
+		AddSyncControl();
 		await SyncAccountNameData(gw2, account);
 		await SyncAccountCurrencyData(gw2, account);
 		account.Initialized = true;
 
 		Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(SyncAccountEvent), account.ApiKey);
+		RemoveSyncControl();
 	}
 
 	//Updates the account display name
 	public static async Task SyncAccountNameData(Gw2Client gw2, Account account) {
+		AddSyncControl();
 		var (summary, _) = await gw2.Hero.Account.GetSummary(account.ApiKey);
 
 		account.AccountName = summary.DisplayName;
 		
 		Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(SyncAccountNameEvent), account.ApiKey);
+		RemoveSyncControl();
 	}
 
 	//Gets the amount of each currency held by the account
 	private static async Task SyncAccountCurrencyData(Gw2Client gw2, Account account) {
+		AddSyncControl();
 		var (currencies, _) = await gw2.Hero.Wallet.GetWallet(account.ApiKey);
 
 		foreach (var currency in currencies) {
@@ -116,5 +151,12 @@ public partial class Sync : Control {
 		}
 
 		Instance.CallDeferred(GodotObject.MethodName.EmitSignal, nameof(SyncCurrenciesAccountEvent), account.ApiKey);
+		RemoveSyncControl();
+	}
+
+	public static class SyncControl {
+		public static bool IsSyncing => SyncElements.Count > 0;
+
+		public static readonly List<string> SyncElements = [];
 	}
 }

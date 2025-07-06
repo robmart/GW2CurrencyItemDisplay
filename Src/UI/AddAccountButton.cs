@@ -25,6 +25,8 @@ public partial class AddAccountButton : ModulatingButton {
 			Error("Error: API key is empty");
 		} else if (Reference.Accounts.Any(x => x.ApiKey == APIKey.Text)) {
 			Error("Error: API key is already registered");
+		} else if (Sync.SyncControl.IsSyncing) {
+			Error("Error: A sync is ongoing");
 		} else {
 			Info("Info: Testing API key");
 
