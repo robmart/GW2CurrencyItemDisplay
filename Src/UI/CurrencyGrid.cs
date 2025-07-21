@@ -19,6 +19,9 @@ public partial class CurrencyGrid : Tree {
 	// Runs every time the currency data changes or a character's currencies are loaded
 	private void SyncCurrencies() {
 		Clear();
+		for (var i = 0; i < Columns; i++) {
+			SetColumnCustomMinimumWidth(i, 0);
+		}
 		//Gets the total amount of currencies, ignoring the ones with a value of 0 if Settings.HideEmptyCurrencies is true
 		var totalCurrency = Settings.HideEmptyCurrencies ? Currency.TotalCurrencies().Where(x => x.Value > 0).ToDictionary() : Currency.TotalCurrencies();
 		//Gets the currencies without their amounts from the above results
@@ -50,7 +53,8 @@ public partial class CurrencyGrid : Tree {
 			var currency = currencies[i-1];
 
 			var image = new ImageTexture();
-			image.SetImage(Image.LoadFromFile(currency.IconPath));
+			if (FileAccess.FileExists(currency.IconPath))
+				image.SetImage(Image.LoadFromFile(currency.IconPath));
 
 			var columnWidth = columnSizeOffset + iconSize + GetStringSize(currency.Name, true);
 			if (columnWidth > GetColumnWidth(i))

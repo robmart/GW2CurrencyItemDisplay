@@ -24,11 +24,12 @@ public partial class CurrencyDisplay : VBoxContainer {
 		
 		// Sets all the currency data in the UI
 		Enabled.ButtonPressed = Currency.Enabled;
-		IsSetup = true;
 		var image = new ImageTexture();
-		image.SetImage(Image.LoadFromFile(Currency.IconPath));
+		if (FileAccess.FileExists(Currency.IconPath))
+			image.SetImage(Image.LoadFromFile(Currency.IconPath));
 		Name.AddImage(image, 32, 32);
 		Name.AppendText($" {Currency.Name}");
+		IsSetup = true;
 	}
 
 	private void _EnableToggled() {

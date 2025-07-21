@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://6ydcbyxwx1he"]
+
+[ext_resource type="Script" uid="uid://cfldtprwoxb20" path="res://Src/UI/SettingsDisplayEnum.cs" id="1_xv18b"]
+
+[node name="SettingsDisplayEnum" type="HBoxContainer" node_paths=PackedStringArray("Options", "Label")]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+script = ExtResource("1_xv18b")
+Options = NodePath("MenuButton")
+Label = NodePath("Label")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MenuButton" type="MenuButton" parent="."]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/h_separation = 0
+theme_override_constants/icon_max_width = 32
+flat = false
+icon_alignment = 1
+vertical_icon_alignment = 0

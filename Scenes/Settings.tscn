@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://c2i2el7vhma7r"]
+[gd_scene load_steps=12 format=3 uid="uid://c2i2el7vhma7r"]
 
 [ext_resource type="PackedScene" uid="uid://dl6gix00ms4gd" path="res://Scenes/AccountDisplay.tscn" id="1_4hxq3"]
 [ext_resource type="Script" uid="uid://deysr2ctmepon" path="res://Src/UI/ApiKeyEdit.cs" id="1_mjqtt"]
@@ -8,6 +8,9 @@
 [ext_resource type="Script" uid="uid://clt0oixybvjxb" path="res://Src/UI/AccountContainer.cs" id="6_ppjuv"]
 [ext_resource type="Script" uid="uid://dl8tnnioa2t21" path="res://Src/UI/CurrencyContainer.cs" id="7_ipgag"]
 [ext_resource type="PackedScene" uid="uid://bk8b7ygqdml0d" path="res://Scenes/CurrencyDisplay.tscn" id="8_646k0"]
+[ext_resource type="Script" uid="uid://mya0u3uuc1w4" path="res://Src/UI/SettingsContainer.cs" id="9_4eoc7"]
+[ext_resource type="PackedScene" uid="uid://dtmtff2dsr4bi" path="res://Scenes/SettingsDisplayBool.tscn" id="10_74x7w"]
+[ext_resource type="PackedScene" uid="uid://6ydcbyxwx1he" path="res://Scenes/SettingsDisplayEnum.tscn" id="11_74x7w"]
 
 [node name="Settings" type="TabContainer"]
 anchors_preset = 15
@@ -17,10 +20,11 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 1
 tab_focus_mode = 0
 
 [node name="Accounts" type="MarginContainer" parent="."]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 10
@@ -108,7 +112,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Currencies" type="MarginContainer" parent="."]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 10
@@ -146,6 +149,24 @@ layout_mode = 2
 [node name="VSeparator" type="VSeparator" parent="Currencies/HBoxContainer"]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="Currencies/HBoxContainer"]
+[node name="ScrollContainer2" type="ScrollContainer" parent="Currencies/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Currencies/HBoxContainer/ScrollContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 0
+
+[node name="SettingsContainer" type="VBoxContainer" parent="Currencies/HBoxContainer/ScrollContainer2/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("9_4eoc7")
+SettingSceneBool = ExtResource("10_74x7w")
+SettingSceneEnum = ExtResource("11_74x7w")
+SettingCategory = 1

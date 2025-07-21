@@ -26,17 +26,17 @@ public class Setting {
 	public required SettingType Type { get; init; }
 	public required SettingCategory Category { get; init; }
 
+	public Setting() {
+		if (Type.Equals(SettingType.Enum) && EnumType == null) {
+			throw new ArgumentException("Enum must be set");
+		}
+	}
+
 	public Type EnumType {
 		get => _enumType;
 		init {
 			if (!value.IsEnum) throw new ArgumentException("EnumType must be a valid enum");
 			_enumType = value;
-		}
-	}
-
-	public Setting() {
-		if (Type.Equals(SettingType.Enum) && EnumType == null) {
-			throw new ArgumentException("Enum must be set");
 		}
 	}
 
@@ -48,13 +48,48 @@ public class Setting {
 				case SettingType.Bool:
 					if (value is not bool) throw new ArgumentException("Value should be a bool"); 
 					break;
-				case SettingType.Enum:
-					if (!Enum.IsDefined(EnumType, value)) throw new ArgumentException($"{value} is not defined in {EnumType.Name}"); 
+				case SettingType.Enum: ;
+					if (!Enum.IsDefined(EnumType, value)) throw new ArgumentException($"{value} is not defined in {EnumType.Name}");
+					if (value is int intValue) {
+						_value = Enum.ToObject(EnumType, intValue);
+						return;
+					}
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 			_value = value;
+		}
+	}
+	
+	public Godot.Collections.Dictionary<string, Variant> Save() {
+		var save = new Godot.Collections.Dictionary<string, Variant>() {
+			{ "Name", Name },
+		};
+		switch (Type) {
+			case SettingType.Bool:
+				save.Add("Value", (bool)Value);
+				break;
+			case SettingType.Enum:
+				save.Add("Value", (int)Value);
+				break;
+			default:
+				throw new ArgumentOutOfRangeException();
+		}
+		
+		return save;
+	}
+	
+	public void Load(Godot.Collections.Dictionary<string, Variant> save) {
+		switch (Type) {
+			case SettingType.Bool:
+				Value = save["Value"].AsBool();
+				break;
+			case SettingType.Enum:
+				Value = save["Value"].AsInt32();
+				break;
+			default:
+				throw new ArgumentOutOfRangeException();
 		}
 	}
 }

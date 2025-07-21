@@ -8,6 +8,7 @@ public partial class Storage : Control {
 	public static void SaveAll() {
 		SaveCurrencies();
 		SaveAccounts();
+		SaveSettings();
 	}
 
 	public static void SaveCurrencies() {
@@ -24,10 +25,17 @@ public partial class Storage : Control {
 		}
 	}
 
+	public static void SaveSettings() {
+		using var saveFile = FileAccess.Open(Reference.SettingsSavePath, FileAccess.ModeFlags.Write);
+		foreach (var settingData in Reference.Settings.Select(setting => setting.Save())) {
+			saveFile.StoreLine(Json.Stringify(settingData));
+		}
+	}
+
 	public static void LoadAll() {
 		LoadCurrencies();
 		LoadAccounts();
-
+		LoadSettings();
 	}
 
 	public static void LoadCurrencies() {
@@ -72,5 +80,27 @@ public partial class Storage : Control {
 			Account.Load(nodeData);
 		}
 		Sync.Instance.EmitSignal(nameof(Sync.Instance.SyncAllAccountEvent));
+	}
+
+	public static void LoadSettings() {
+		if (!FileAccess.FileExists(Reference.SettingsSavePath)) return;
+		
+		using var saveFile = FileAccess.Open(Reference.SettingsSavePath, FileAccess.ModeFlags.Read);
+		while (saveFile.GetPosition() < saveFile.GetLength()) {
+			var jsonString = saveFile.GetLine();
+			var json = new Json();
+			var parseResult = json.Parse(jsonString);
+
+			if (parseResult != Error.Ok) {
+				GD.Print(
+					$"JSON Parse Error: {json.GetErrorMessage()} in {jsonString} at line {json.GetErrorLine()}");
+				continue;
+			}
+
+			var nodeData = 
+				new Godot.Collections.Dictionary<string, Variant>((Godot.Collections.Dictionary)json.Data);
+			Reference.Settings.First(x => x.Name.Equals(nodeData["Name"].AsString())).Load(nodeData);
+		}
+		Sync.Instance.EmitSignal(nameof(Sync.Instance.SyncAllEvent));
 	}
 }

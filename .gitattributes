@@ -1,0 +1,7 @@
+*.gitignore text eol=crlf
+*.xml text eol=crlf
+*.csproj text eol=crlf
+*.user text eol=crlf
+*.tcsn text eol=crlf
+*.cs text eol=crlf
+*.uid text eol=crlf
