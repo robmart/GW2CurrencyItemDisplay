@@ -48,12 +48,12 @@ jobs:
             --export-release "Linux/X11" ../builds/linux/${EXPORT_NAME}_${TAG_VERSION}_linux.x86_64
           cd ..
       - name: Upload Windows
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows
           path: builds/windows
       - name: Upload Windows
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux
           path: builds/linux
