@@ -33,20 +33,16 @@ jobs:
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
       - name: Build Windows
         run: |
-          cd godot
-          godot \
-            -v \
-            --headless \
-            --export-release "Windows Desktop" ../builds/windows/${EXPORT_NAME}_${TAG_VERSION}_windows.exe
-          cd ..
+          mkdir -v -p build/windows
+          EXPORT_DIR="$(readlink -f build)"
+          cd $PROJECT_PATH
+          godot --headless --verbose --export-release "Windows Desktop" "$EXPORT_DIR/windows/$EXPORT_NAME.exe"
       - name: Build Linux
         run: |
-          cd godot
-          godot \
-            -v \
-            --headless \
-            --export-release "Linux/X11" ../builds/linux/${EXPORT_NAME}_${TAG_VERSION}_linux.x86_64
-          cd ..
+          mkdir -v -p build/windows
+          EXPORT_DIR="$(readlink -f build)"
+          cd $PROJECT_PATH
+          godot --headless --verbose --export-release "Windows Desktop" "$EXPORT_DIR/windows/$EXPORT_NAME.exe"
       - name: Upload Windows
         uses: actions/upload-artifact@v4
         with:
