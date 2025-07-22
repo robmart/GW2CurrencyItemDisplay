@@ -6,4 +6,7 @@
   <ItemGroup>
     <PackageReference Include="GW2SDK" Version="2.5.2" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include=".github\workflows\godot-ci.yml" />
+  </ItemGroup>
 </Project>
