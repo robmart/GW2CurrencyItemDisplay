@@ -11,9 +11,13 @@ env:
 jobs:
   dotnet-install:
     name: .NET installation
-    uses: actions/setup-dotnet@v3
-    with:
-      dotnet-version: "6.0.x"
+    runs-on: ubuntu-22.04
+    steps:
+      - name: .NET installation
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "6.0.x"
+
   export-windows:
     name: Windows Export
     runs-on: ubuntu-22.04  # Use 22.04 with godot 4
@@ -69,41 +73,41 @@ jobs:
         with:
           name: linux
           path: build/linux
-
-#  export-web: # Web C# doesn't exist
-#    name: Web Export
-#    runs-on: ubuntu-22.04  # Use 22.04 with godot 4
-#    needs: dotnet-install
-#    container:
-#      image: barichello/godot-ci:mono-4.3
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v4
-#        with:
-#          lfs: true
-#      - name: Setup
-#        run: |
-#          mkdir -v -p ~/.local/share/godot/export_templates/
-#          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
-#      - name: Web Build
-#        run: |
-#          mkdir -v -p build/web
-#          EXPORT_DIR="$(readlink -f build)"
-#          cd $PROJECT_PATH
-#          godot --headless --verbose --export-release "Web" "$EXPORT_DIR/web/index.html"
-#      - name: Upload Artifact
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: web
-#          path: build/web
-#      - name: Install rsync 📚
-#        run: |
-#          apt-get update && apt-get install -y rsync
-#      - name: Deploy to GitHub Pages 🚀
-#        uses: JamesIves/github-pages-deploy-action@releases/v4
-#        with:
-#          branch: gh-pages # The branch the action should deploy to.
-#          folder: build/web # The folder the action should deploy.
+  
+  #  export-web: # Web C# doesn't exist
+  #    name: Web Export
+  #    runs-on: ubuntu-22.04  # Use 22.04 with godot 4
+  #    needs: dotnet-install
+  #    container:
+  #      image: barichello/godot-ci:mono-4.3
+  #    steps:
+  #      - name: Checkout
+  #        uses: actions/checkout@v4
+  #        with:
+  #          lfs: true
+  #      - name: Setup
+  #        run: |
+  #          mkdir -v -p ~/.local/share/godot/export_templates/
+  #          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
+  #      - name: Web Build
+  #        run: |
+  #          mkdir -v -p build/web
+  #          EXPORT_DIR="$(readlink -f build)"
+  #          cd $PROJECT_PATH
+  #          godot --headless --verbose --export-release "Web" "$EXPORT_DIR/web/index.html"
+  #      - name: Upload Artifact
+  #        uses: actions/upload-artifact@v4
+  #        with:
+  #          name: web
+  #          path: build/web
+  #      - name: Install rsync 📚
+  #        run: |
+  #          apt-get update && apt-get install -y rsync
+  #      - name: Deploy to GitHub Pages 🚀
+  #        uses: JamesIves/github-pages-deploy-action@releases/v4
+  #        with:
+  #          branch: gh-pages # The branch the action should deploy to.
+  #          folder: build/web # The folder the action should deploy.
 
   export-mac:
     name: Mac Export
