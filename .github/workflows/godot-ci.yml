@@ -43,12 +43,16 @@ jobs:
           EXPORT_DIR="$(readlink -f build)"
           cd $PROJECT_PATH
           godot --headless --verbose --export-release "Linux/X11" "$EXPORT_DIR/linux/$EXPORT_NAME.x86_64"
+      - name: Test
+        run: |
+          ls build/windows
+          ls build/linux
       - name: Upload Windows
         uses: actions/upload-artifact@v4
         with:
           name: windows
           path: build/windows
-      - name: Upload Windows
+      - name: Upload Linux
         uses: actions/upload-artifact@v4
         with:
           name: linux
