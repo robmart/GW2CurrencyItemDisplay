@@ -9,129 +9,51 @@ env:
   PROJECT_PATH: .
 
 jobs:
-  dotnet-install:
-    name: .NET installation
-    runs-on: ubuntu-22.04
+  build:
+    name: Godot Build
+    runs-on: ubuntu-latest
+    container:
+      image: docker://barichello/godot-ci:mono-4.3
     steps:
+      - name: Get version
+        run: |
+          SUBSTRING=$(echo "${GITHUB_REF#refs/tags/}" | cut -c 2-)
+          echo "TAG_VERSION=$SUBSTRING" >> $GITHUB_ENV
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
       - name: .NET installation
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: "6.0.x"
-
-  export-windows:
-    name: Windows Export
-    runs-on: ubuntu-22.04  # Use 22.04 with godot 4
-    needs: dotnet-install
-    container:
-      image: barichello/godot-ci:mono-4.3
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          lfs: true
+          dotnet-version: 6.0.x
       - name: Setup
         run: |
-          mkdir -v -p ~/.local/share/godot/export_templates/
-          mkdir -v -p ~/.config/
-          mv /root/.config/godot ~/.config/godot
-          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
-      - name: Windows Build
+          mkdir -v -p builds/windows builds/linux ~/.local/share/godot/export_templates
+          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
+      - name: Build Windows
         run: |
-          mkdir -v -p build/windows
-          EXPORT_DIR="$(readlink -f build)"
-          cd $PROJECT_PATH
-          godot --headless --verbose --export-release "Windows Desktop" "$EXPORT_DIR/windows/$EXPORT_NAME.exe"
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+          cd godot
+          godot \
+            -v \
+            --headless \
+            --export-release "Windows Desktop" ../builds/windows/${EXPORT_NAME}_${TAG_VERSION}_windows.exe
+          cd ..
+      - name: Build Linux
+        run: |
+          cd godot
+          godot \
+            -v \
+            --headless \
+            --export-release "Linux/X11" ../builds/linux/${EXPORT_NAME}_${TAG_VERSION}_linux.x86_64
+          cd ..
+      - name: Upload Windows
+        uses: actions/upload-artifact@v3
         with:
           name: windows
-          path: build/windows
-
-  export-linux:
-    name: Linux Export
-    runs-on: ubuntu-22.04  # Use 22.04 with godot 4
-    needs: dotnet-install
-    container:
-      image: barichello/godot-ci:mono-4.3
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          lfs: true
-      - name: Setup
-        run: |
-          mkdir -v -p ~/.local/share/godot/export_templates/
-          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
-      - name: Linux Build
-        run: |
-          mkdir -v -p build/linux
-          EXPORT_DIR="$(readlink -f build)"
-          cd $PROJECT_PATH
-          godot --headless --verbose --export-release "Linux/X11" "$EXPORT_DIR/linux/$EXPORT_NAME.x86_64"
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+          path: builds/windows
+      - name: Upload Windows
+        uses: actions/upload-artifact@v3
         with:
           name: linux
-          path: build/linux
-  
-  #  export-web: # Web C# doesn't exist
-  #    name: Web Export
-  #    runs-on: ubuntu-22.04  # Use 22.04 with godot 4
-  #    needs: dotnet-install
-  #    container:
-  #      image: barichello/godot-ci:mono-4.3
-  #    steps:
-  #      - name: Checkout
-  #        uses: actions/checkout@v4
-  #        with:
-  #          lfs: true
-  #      - name: Setup
-  #        run: |
-  #          mkdir -v -p ~/.local/share/godot/export_templates/
-  #          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
-  #      - name: Web Build
-  #        run: |
-  #          mkdir -v -p build/web
-  #          EXPORT_DIR="$(readlink -f build)"
-  #          cd $PROJECT_PATH
-  #          godot --headless --verbose --export-release "Web" "$EXPORT_DIR/web/index.html"
-  #      - name: Upload Artifact
-  #        uses: actions/upload-artifact@v4
-  #        with:
-  #          name: web
-  #          path: build/web
-  #      - name: Install rsync 📚
-  #        run: |
-  #          apt-get update && apt-get install -y rsync
-  #      - name: Deploy to GitHub Pages 🚀
-  #        uses: JamesIves/github-pages-deploy-action@releases/v4
-  #        with:
-  #          branch: gh-pages # The branch the action should deploy to.
-  #          folder: build/web # The folder the action should deploy.
-
-  export-mac:
-    name: Mac Export
-    runs-on: ubuntu-22.04  # Use 22.04 with godot 4
-    needs: dotnet-install
-    container:
-      image: barichello/godot-ci:mono-4.3
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          lfs: true
-      - name: Setup
-        run: |
-          mkdir -v -p ~/.local/share/godot/export_templates/
-          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
-      - name: Mac Build
-        run: |
-          mkdir -v -p build/mac
-          EXPORT_DIR="$(readlink -f build)"
-          cd $PROJECT_PATH
-          godot --headless --verbose --export-release "macOS" "$EXPORT_DIR/mac/$EXPORT_NAME.zip"
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: mac
-          path: build/mac
+          path: builds/linux
