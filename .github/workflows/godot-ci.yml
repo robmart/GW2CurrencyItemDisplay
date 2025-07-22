@@ -9,9 +9,15 @@ env:
   PROJECT_PATH: .
 
 jobs:
+  dotnet-install:
+    name: .NET installation
+    uses: actions/setup-dotnet@v3
+    with:
+      dotnet-version: "6.0.x"
   export-windows:
     name: Windows Export
     runs-on: ubuntu-22.04  # Use 22.04 with godot 4
+    needs: dotnet-install
     container:
       image: barichello/godot-ci:mono-4.3
     steps:
@@ -40,6 +46,7 @@ jobs:
   export-linux:
     name: Linux Export
     runs-on: ubuntu-22.04  # Use 22.04 with godot 4
+    needs: dotnet-install
     container:
       image: barichello/godot-ci:mono-4.3
     steps:
@@ -66,6 +73,7 @@ jobs:
 #  export-web: # Web C# doesn't exist
 #    name: Web Export
 #    runs-on: ubuntu-22.04  # Use 22.04 with godot 4
+#    needs: dotnet-install
 #    container:
 #      image: barichello/godot-ci:mono-4.3
 #    steps:
@@ -100,6 +108,7 @@ jobs:
   export-mac:
     name: Mac Export
     runs-on: ubuntu-22.04  # Use 22.04 with godot 4
+    needs: dotnet-install
     container:
       image: barichello/godot-ci:mono-4.3
     steps:
