@@ -47,9 +47,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows
-          path: "$EXPORT_DIR/windows"
+          path: build/windows
       - name: Upload Windows
         uses: actions/upload-artifact@v4
         with:
           name: linux
-          path: "$EXPORT_DIR/linux"
+          path: build/linux
